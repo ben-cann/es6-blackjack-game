@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" ng-app="blackjack">
+    
+    <head>
+    	<meta charset="UTF-8">
+    	<meta name="robots" content="noindex">
+    	<title>Blackjack Game</title>
+    </head>
+    
+    <body>
+    	
+        <div class="baize" ng-controller="MainController">
+
+            <div class="players">
+                <div class="player" ng-class="{'current': player === getCurrentPlayer() && !getEnded(), 'bust': player.getBust(), 'winner': player.getWinner() }" ng-repeat="player in playerList track by $index">
+                    <div class="card-container playingCards">
+                        <div class="card rank-{{card.label}} {{card.suit}}" ng-repeat="card in player.hand track by $index">
+                            <span class="rank">{{card.label}}</span>
+                            <span class="suit"></span>
+                        </div>
+                    </div>
+                    <p>{{ player.getTotal() }}</p>
+                    <h3>{{ player.name }}</h3>
+                </div>
+            </div>
+            
+            <div class="intro" ng-show="!getStarted()">
+                <h1>Welcome to Blackjack</h1>
+                <p>Please enter the number of players taking part:</p>
+                <input type="number" ng-model="numberOfPlayers" required />
+                <input type="button" ng-click="start()" ng-disabled="!numberOfPlayers" value="Start game" />
+            </div>
+
+            <div class="controls" ng-show="getStarted()">
+                <div class="player-controls" ng-show="getCurrentPlayer().id != 0">
+                    <h1>{{getCurrentPlayer().name}} to play</h1>
+                    <a ng-click="twist()">Twist</a>
+                    <a ng-click="stick()">Stick</a>
+                </div>
+                <div class="nextgame-controls" ng-show="getEnded()">
+                    <h1>Hand finished</h1>
+                    <p><b>Winners:</b> <span ng-repeat="player in playerList" ng-show="player.getWinner()">{{player.name}} </span></p>
+                    <a ng-click="restart()">Next</a>
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+
+    <script type="text/javascript" src="vendor.bundle.js"></script>
+    <script type="text/javascript" src="bundle.js"></script>
+
+</html>
